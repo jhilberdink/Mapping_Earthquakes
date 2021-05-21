@@ -33,9 +33,9 @@ function styleInfo(feature) {
     return {
         opacity: 1,
         fillOpacity: 1,
-        fillColor: "#ffae42",
+        fillColor: getColor(feature.properties.mag),
         color: "#000000",
-        radius: getRadius(),
+        radius: getRadius(feature.properties.mag),
         stroke: true,
         weight: 0.5
     };
@@ -48,6 +48,25 @@ function getRadius(magnitude) {
     return magnitude * 4;
 }
 
+function getColor(magnitude) {
+    if (magnitude > 5) {
+        return "#ea2c2c";
+      }
+      if (magnitude > 4) {
+        return "#ea822c";
+      }
+      if (magnitude > 3) {
+        return "#ee9c00";
+      }
+      if (magnitude > 2) {
+        return "#eecc00";
+      }
+      if (magnitude > 1) {
+        return "#d4ee00";
+      }
+      return "#98ee00";
+}
+
 // Retrieve the earthquake GeoJSON data
 d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson").then(function(data) {
         // Creating a GeoJSON layer with the retrieved data
@@ -58,7 +77,11 @@ d3.json("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geoj
                 return L.circleMarker(latlng);
             },
         // set the style for each circle marker using the style function
-        style: styleInfo 
+        style: styleInfo,
+        // Create popups for each circle marker to display magnitude and earthquake location
+        onEachFeature: function(feature, layer) {
+            layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
+        }
         }).addTo(map);
 });
 
