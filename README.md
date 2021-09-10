@@ -6,3 +6,8 @@ Loading the [Earthquake_Challenge/index.html](Earthquake_Challenge/index.html) w
 
 ![earthquake map](image/earthquakes.png) 
 
+### Technologies Used
+
+- JavaScript
+- Leaflet
+- HTML/CSS
